@@ -19,7 +19,7 @@ public class TeamStats {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private Integer wins;
-    private Integer loses;
+    private Integer losses;
     private Integer draws;
     private Integer matchesPlayed;
     private Integer currentPosition;

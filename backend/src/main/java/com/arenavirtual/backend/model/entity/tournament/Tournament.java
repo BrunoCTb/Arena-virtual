@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(name = "tournament")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -26,10 +27,8 @@ public class Tournament {
     private String imageRepresentationUrl;
 
     @ManyToOne
+    @JoinColumn(name="format_id")
     private Format format; // formato suiço, pontos corridos...
-
-    @OneToOne
-    private Player referee;
 
     @OneToMany
     private List<Team> teams;

@@ -21,7 +21,7 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String name;
+    private String username;
     private LocalDate birth;
     private String imageUrl;
     private Set<String> modalities;

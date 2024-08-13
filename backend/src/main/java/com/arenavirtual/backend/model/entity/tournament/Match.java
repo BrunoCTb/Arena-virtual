@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -26,7 +25,7 @@ public class Match {
     private Boolean hasRounds;
     private LocalDate startsAt;
     private LocalDate endsAt;
-    private Integer duration;
+    private Integer durationMinutes;
 
     @OneToOne
     private Team winnerTeam;
@@ -41,7 +40,7 @@ public class Match {
     private Tournament tournament;
 
     @OneToOne
-    private Player referee;
+    private Player host;
 
 
 
