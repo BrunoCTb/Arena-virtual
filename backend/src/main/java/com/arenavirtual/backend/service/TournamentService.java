@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class tournamentService {
+public class TournamentService {
 
     @Autowired
     TournamentRepository tournamentRepository;
@@ -19,10 +20,7 @@ public class tournamentService {
         tournamentRepository.save(tournament);
     }
 
-    @Transactional
-    public void remove(UUID tournamentId) {
-        tournamentRepository.deleteById(tournamentId);
+    public Optional<Tournament> findById(UUID id) {
+        return tournamentRepository.findById(id);
     }
-
-
 }
