@@ -22,8 +22,11 @@ public class Tournament {
     private UUID id;
     private String title; // campeonato abc 3a edicao...
     private String modality; // futebol, jogo especifico...
+    @Column(name = "online_mode")
     private Boolean onlineMode; // outros usuarios poderao entrar
+    @Column(name = "teams_quantity")
     private Integer teamsQuantity;
+    @Column(name = "image_representation_url")
     private String imageRepresentationUrl;
 
     @ManyToOne
@@ -36,6 +39,16 @@ public class Tournament {
     @OneToMany
     private List<Player> players;
 
-
-
+    @Override
+    public String toString() {
+        return "Tournament{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", modality='" + modality + '\'' +
+                ", onlineMode=" + onlineMode +
+                ", teamsQuantity=" + teamsQuantity +
+                ", imageRepresentationUrl='" + imageRepresentationUrl + '\'' +
+                ", format=" + format +
+                '}';
+    }
 }

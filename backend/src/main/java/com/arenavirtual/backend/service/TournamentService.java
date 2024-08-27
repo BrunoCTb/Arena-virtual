@@ -21,6 +21,10 @@ public class TournamentService {
     }
 
     public Optional<Tournament> findById(UUID id) {
+        for (Tournament t : tournamentRepository.findAll()) {
+            System.out.println(t.toString());
+        }
+
         return tournamentRepository.findById(id);
     }
 }

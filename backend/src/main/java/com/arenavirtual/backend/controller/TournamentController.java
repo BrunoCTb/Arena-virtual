@@ -22,10 +22,12 @@ public class TournamentController {
         Optional<Tournament> tournament = tournamentService.findById(id);
 
         if (tournament.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body("Torneio não encontrado");
         }
 
-        return ResponseEntity.ok().body(tournament.toString());
+        System.out.println("-> " + tournament);
+
+        return ResponseEntity.ok().body(tournament.toString() + "\n");
     }
 
 }

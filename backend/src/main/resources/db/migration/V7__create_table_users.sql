@@ -1,6 +1,6 @@
 CREATE TABLE users (
 
-    id CHAR(36) PRIMARY KEY,
+    id BINARY(16) PRIMARY KEY DEFAULT (UUID()),
     username VARCHAR(30),
     first_name VARCHAR(100),
     last_name VARCHAR(250),
