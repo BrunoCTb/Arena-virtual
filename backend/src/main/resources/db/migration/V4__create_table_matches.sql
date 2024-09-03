@@ -1,5 +1,5 @@
 CREATE TABLE matches (
-    id CHAR(36) PRIMARY KEY,
+    id BINARY(16) PRIMARY KEY DEFAULT (UUID()),
     current_status VARCHAR(100),
     result VARCHAR(100),
     best_of VARCHAR(100),
@@ -7,9 +7,9 @@ CREATE TABLE matches (
     starts_at TIMESTAMP,
     ends_at TIMESTAMP,
     duration_minutes INTEGER,
-    team1_id CHAR(36),
-    team2_id CHAR(36),
-    tournament_id CHAR(36),
+    team1_id BINARY(16),
+    team2_id BINARY(16),
+    tournament_id BINARY(16),
     FOREIGN KEY (team1_id) REFERENCES team(id),
     FOREIGN KEY (team2_id) REFERENCES team(id),
     FOREIGN KEY (tournament_id) REFERENCES tournament(id)

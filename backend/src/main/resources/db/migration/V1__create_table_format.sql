@@ -1,5 +1,5 @@
 CREATE TABLE format (
-    id CHAR(36) PRIMARY KEY,
+    id BINARY(16) PRIMARY KEY DEFAULT (UUID()),
     name VARCHAR(250)
 
 )

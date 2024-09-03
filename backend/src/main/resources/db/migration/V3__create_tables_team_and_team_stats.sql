@@ -1,20 +1,20 @@
 -- criar a tabela team e team_status sem foreign keys, pois sera relacao one-to-one
 CREATE TABLE team_stats (
-    id CHAR(36) PRIMARY KEY,
+    id BINARY(16) PRIMARY KEY DEFAULT (UUID()),
     wins INTEGER,
     losses INTEGER,
     draws INTEGER,
     matchesPlayed INTEGER,
     currentPosition INTEGER,
-    team_id CHAR(36) UNIQUE,
-    tournament_id CHAR(36)
+    team_id BINARY(16) UNIQUE,
+    tournament_id BINARY(36)
 );
 
 CREATE TABLE team (
-    id CHAR(36) PRIMARY KEY,
+    id BINARY(16) PRIMARY KEY DEFAULT (UUID()),
     name VARCHAR(250),
     logo_url VARCHAR(250),
-    team_stats_id CHAR(36) UNIQUE
+    team_stats_id BINARY(16) UNIQUE
 );
 
 

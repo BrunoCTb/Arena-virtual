@@ -1,6 +1,6 @@
 CREATE TABLE host (
 
-    id CHAR(36) PRIMARY KEY,
+    id BINARY(16) PRIMARY KEY DEFAULT (UUID()),
     username VARCHAR(250)
 
 )

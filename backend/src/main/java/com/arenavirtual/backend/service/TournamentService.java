@@ -27,4 +27,8 @@ public class TournamentService {
 
         return tournamentRepository.findById(id);
     }
+
+    public boolean existsByTitle(String title) {
+        return tournamentRepository.existsByTitle(title);
+    }
 }

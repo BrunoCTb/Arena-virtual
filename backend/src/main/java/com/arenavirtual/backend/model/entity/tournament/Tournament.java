@@ -3,6 +3,7 @@ package com.arenavirtual.backend.model.entity.tournament;
 import com.arenavirtual.backend.model.entity.player.Player;
 import com.arenavirtual.backend.model.entity.team.Team;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "tournament")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class Tournament {
@@ -22,11 +24,11 @@ public class Tournament {
     private UUID id;
     private String title; // campeonato abc 3a edicao...
     private String modality; // futebol, jogo especifico...
-    @Column(name = "online_mode")
+    @Column(name = "onlineMode")
     private Boolean onlineMode; // outros usuarios poderao entrar
-    @Column(name = "teams_quantity")
+    @Column(name = "teamsQuantity")
     private Integer teamsQuantity;
-    @Column(name = "image_representation_url")
+    @Column(name = "imageRepresentationUrl")
     private String imageRepresentationUrl;
 
     @ManyToOne
