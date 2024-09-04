@@ -45,6 +45,8 @@ public class TournamentController {
 
         tournamentService.save(newTournament);
 
+        System.out.println(newTournament);
+
         return ResponseEntity.ok("Campeonato criado com sucesso");
     }
 

@@ -4,8 +4,8 @@ CREATE TABLE team_stats (
     wins INTEGER,
     losses INTEGER,
     draws INTEGER,
-    matchesPlayed INTEGER,
-    currentPosition INTEGER,
+    matches_played INTEGER,
+    current_position INTEGER,
     team_id BINARY(16) UNIQUE,
     tournament_id BINARY(36)
 );

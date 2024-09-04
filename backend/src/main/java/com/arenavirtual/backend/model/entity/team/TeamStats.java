@@ -3,16 +3,16 @@ package com.arenavirtual.backend.model.entity.team;
 
 import com.arenavirtual.backend.model.entity.tournament.Tournament;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class TeamStats {
 
     @Id
@@ -28,7 +28,9 @@ public class TeamStats {
     private Team team;
 
     @OneToOne
-    private Tournament currentTournament;
+    private Tournament Tournament;
 
-
+    public TeamStats(Team team) {
+        this.team = team;
+    }
 }

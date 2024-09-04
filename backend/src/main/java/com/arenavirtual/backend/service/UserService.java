@@ -22,7 +22,7 @@ public class UserService {
     public void save(User user) {
         try {
             userRepository.save(user);
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Exception -> " + e);
         }
     }

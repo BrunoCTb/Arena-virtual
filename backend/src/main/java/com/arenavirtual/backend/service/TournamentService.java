@@ -17,7 +17,11 @@ public class TournamentService {
 
     @Transactional
     public void save(Tournament tournament) {
-        tournamentRepository.save(tournament);
+        try {
+            tournamentRepository.save(tournament);
+        } catch (Exception e) {
+            System.out.println("Exception -> " + e);
+        }
     }
 
     public Optional<Tournament> findById(UUID id) {

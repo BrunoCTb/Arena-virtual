@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Set;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Team {
 
     @Id
@@ -22,7 +24,7 @@ public class Team {
     private String logoUrl;
 
     @OneToOne
-    private TeamStats stats;
+    private TeamStats teamStats;
 
     @OneToMany
     private Set<Player> players;
