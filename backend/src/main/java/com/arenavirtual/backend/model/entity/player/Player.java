@@ -2,10 +2,12 @@ package com.arenavirtual.backend.model.entity.player;
 
 import com.arenavirtual.backend.model.entity.team.Team;
 import com.arenavirtual.backend.model.entity.tournament.Tournament;
+import com.arenavirtual.backend.model.entity.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,18 +18,20 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String username;
-    private LocalDate birth;
     private String imageUrl;
-    private Set<String> modalities;
 
     @ManyToOne
     private Team team;
+
+    @OneToOne
+    private User user;
 
     @OneToMany
     private List<Tournament> tournaments;

@@ -1,8 +1,7 @@
 package com.arenavirtual.backend.controller;
 
-import com.arenavirtual.backend.dto.TeamDto;
+import com.arenavirtual.backend.dto.TeamDTO;
 import com.arenavirtual.backend.model.entity.team.Team;
-import com.arenavirtual.backend.repository.TeamRepository;
 import com.arenavirtual.backend.service.TeamService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ public class TeamController {
     TeamService teamService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createTeam(@RequestBody TeamDto dto) {
+    public ResponseEntity<String> createTeam(@RequestBody TeamDTO dto) {
         if (teamService.existsByName(dto.name())) {
             return ResponseEntity.badRequest().body("Nome do time já cadastrado!");
         }

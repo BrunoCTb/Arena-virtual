@@ -1,5 +1,6 @@
 package com.arenavirtual.backend.model.entity.user;
 
+import com.arenavirtual.backend.model.entity.player.Player;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +32,10 @@ public class User {
     private LocalDate birth;
     @Column(name = "image_url")
     private String imageUrl;
+
+
+//    private Player player;
+
 
     @Override
     public String toString() {

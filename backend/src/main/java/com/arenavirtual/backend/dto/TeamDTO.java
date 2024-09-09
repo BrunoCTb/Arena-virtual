@@ -1,6 +1,6 @@
 package com.arenavirtual.backend.dto;
 
-public record TeamDto (
+public record TeamDTO(
         String name,
         String logoUrl
 )
