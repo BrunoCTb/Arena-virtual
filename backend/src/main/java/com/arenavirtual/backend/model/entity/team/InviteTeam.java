@@ -1,7 +1,7 @@
 package com.arenavirtual.backend.model.entity.team;
 
-import com.arenavirtual.backend.model.entity.player.Player;
 import com.arenavirtual.backend.model.entity.user.User;
+import com.arenavirtual.backend.model.inviteStatus.InviteStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -17,22 +16,24 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-public class Team {
+public class InviteTeam {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String name;
     private LocalDate createdAt;
-    private Boolean openToInvite; // players podem solicitar para entrarem
-    private String logoUrl;
 
     @ManyToOne
-    private User createdBy;
+    private User invitedBy;
 
-    @OneToOne
-    private TeamStats teamStats;
+    @ManyToOne
+    private User invitedTarget;
 
-    @OneToMany
-    private Set<Player> players;
+    @ManyToOne
+    private Team teamTarget;
+
+    @Enumerated(EnumType.STRING)
+    private InviteStatus inviteStatus;
+
+
 }

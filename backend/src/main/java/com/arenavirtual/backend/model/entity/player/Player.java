@@ -24,8 +24,12 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String username;
+
+    private Long publicId;
+
+    private String username; // apenas um nome local que pode ser modificado que será acompanhado do
     private String imageUrl;
+
 
     @ManyToOne
     private Team team;

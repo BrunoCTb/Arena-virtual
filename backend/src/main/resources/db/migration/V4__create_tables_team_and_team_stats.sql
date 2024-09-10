@@ -13,8 +13,12 @@ CREATE TABLE team_stats (
 CREATE TABLE team (
     id BINARY(16) PRIMARY KEY DEFAULT (UUID()),
     name VARCHAR(250),
+    created_at TIMESTAMP,
+    open_to_invite BOOLEAN,
     logo_url VARCHAR(250),
-    team_stats_id BINARY(16) UNIQUE
+    created_by BINARY(16),
+    team_stats_id BINARY(16) UNIQUE,
+    FOREIGN KEY (created_by) REFERENCES users(id)
 );
 
 
