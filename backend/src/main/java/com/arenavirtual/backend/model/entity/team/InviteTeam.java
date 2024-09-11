@@ -24,12 +24,15 @@ public class InviteTeam {
     private LocalDate createdAt;
 
     @ManyToOne
+    @JoinColumn(name = "invitedBy")
     private User invitedBy;
 
     @ManyToOne
+    @JoinColumn(name = "invitedTarget")
     private User invitedTarget;
 
     @ManyToOne
+    @JoinColumn(name = "teamTarget")
     private Team teamTarget;
 
     @Enumerated(EnumType.STRING)

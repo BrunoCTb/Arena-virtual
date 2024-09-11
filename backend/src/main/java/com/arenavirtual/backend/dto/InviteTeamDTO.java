@@ -5,6 +5,6 @@ package com.arenavirtual.backend.dto;
 // time
 
 public record InviteTeamDTO(
-        Long playerToSendId
+        Long playerToJoin
 ) {
 }

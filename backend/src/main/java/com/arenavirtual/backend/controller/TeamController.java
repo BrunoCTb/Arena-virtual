@@ -56,9 +56,9 @@ public class TeamController {
 
 
     // TIME ENVIAR CONVITE PARA PLAYER (USER)
-    @PostMapping("{id}/invite/send")
+    @PostMapping("/{id}/invite/send")
     public ResponseEntity<String> teamSendInvite(@PathVariable(name = "id") UUID id, @RequestBody InviteTeamDTO dto) {
-        Optional<Player> playerFound = userService.findPlayerByPublicId(dto.playerToSendId());
+        Optional<Player> playerFound = userService.findPlayerByPublicId(dto.playerToJoin());
         if (playerFound.isEmpty()) {
             return ResponseEntity.badRequest().body("Player não encotrado por seu id público!");
         }
@@ -78,12 +78,35 @@ public class TeamController {
         InviteTeam inviteTeam = new InviteTeam(LocalDate.now(), teamFound.get().getCreatedBy(),
                 playerFound.get().getUser(), teamFound.get(), InviteStatus.PENDING);
 
-        System.out.println(inviteTeam);
         inviteService.createInviteForTeam(inviteTeam);
 
         return ResponseEntity.ok("Ok");
     }
 
+    // PLAYER SOLICITA PARA ENTRAR EM UM TIME
+    @PostMapping("/{id}/joinrequest")
+    public ResponseEntity<String> playerJoin(@PathVariable(name = "id") UUID id, @RequestBody InviteTeamDTO dto) {
+        Optional<Team> teamFound = teamService.findById(id);
+        if (teamFound.isEmpty()) {
+            return ResponseEntity.badRequest().body("Time não encontrado por id!");
+        }
+
+        Optional<Player> playerFound = userService.findPlayerByPublicId(dto.playerToJoin());
+        if (playerFound.isEmpty()) {
+            return ResponseEntity.badRequest().body("Player não encotrado por seu id público!");
+        }
+
+        if (!teamFound.get().getOpenToInvite()) {
+            return ResponseEntity.badRequest().body("O time não permite solicitações para entrar");
+        }
+
+        InviteTeam inviteTeam = new InviteTeam(LocalDate.now(), playerFound.get().getUser(), teamFound.get().getCreatedBy(),
+                teamFound.get(), InviteStatus.PENDING);
+
+        inviteService.createInviteForTeam(inviteTeam);
+
+        return ResponseEntity.ok("Solicitação para entrar no time " + teamFound.get().getName() + " criada com sucesso!");
+    }
 
 
 }

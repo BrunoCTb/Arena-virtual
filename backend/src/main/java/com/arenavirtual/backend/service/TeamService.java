@@ -31,11 +31,6 @@ public class TeamService {
     }
 
     public Optional<Team> findById(UUID id) {
-        List<Team> all = teamRepository.findAll();
-        for (Team t : all) {
-            System.out.println("- " + t);
-        }
-
         return teamRepository.findById(id);
     }
 
