@@ -35,5 +35,11 @@ public class InviteTeam {
     @Enumerated(EnumType.STRING)
     private InviteStatus inviteStatus;
 
-
+    public InviteTeam(LocalDate createdAt, User invitedBy, User invitedTarget, Team teamTarget, InviteStatus inviteStatus) {
+        this.createdAt = createdAt;
+        this.invitedBy = invitedBy;
+        this.invitedTarget = invitedTarget;
+        this.teamTarget = teamTarget;
+        this.inviteStatus = inviteStatus;
+    }
 }

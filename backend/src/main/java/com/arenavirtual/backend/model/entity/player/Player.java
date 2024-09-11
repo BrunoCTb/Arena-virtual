@@ -34,11 +34,8 @@ public class Player {
     @ManyToOne
     private Team team;
 
-    @OneToOne
+    @ManyToOne
     private User user;
-
-    @OneToMany
-    private List<Tournament> tournaments;
 
 
 }

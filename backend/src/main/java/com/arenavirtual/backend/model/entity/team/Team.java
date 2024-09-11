@@ -28,11 +28,10 @@ public class Team {
     private String logoUrl;
 
     @ManyToOne
+    @JoinColumn(name = "created_by")
     private User createdBy;
 
     @OneToOne
     private TeamStats teamStats;
 
-    @OneToMany
-    private Set<Player> players;
 }

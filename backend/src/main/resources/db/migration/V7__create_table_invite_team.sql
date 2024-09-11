@@ -1,12 +1,13 @@
-CREATE TABLE inviteTeam (
+CREATE TABLE invite_team (
     id BINARY(16) PRIMARY KEY DEFAULT (UUID()),
     created_at TIMESTAMP,
+    invite_status VARCHAR(20),
 
-    invitedBy BINARY(16),
-    invitedTarget BINARY(16),
-    teamTarget BINARY(16),
+    invited_by BINARY(16),
+    invited_target BINARY(16),
+    team_target BINARY(16),
 
-    FOREIGN KEY (invitedBy) REFERENCES users(id),
-    FOREIGN KEY (invitedTarget) REFERENCES users(id),
-    FOREIGN KEY (teamTarget) REFERENCES team(id)
+    FOREIGN KEY (invited_by) REFERENCES users(id),
+    FOREIGN KEY (invited_target) REFERENCES users(id),
+    FOREIGN KEY (team_target) REFERENCES team(id)
 );
