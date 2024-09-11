@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,6 +55,10 @@ public class TeamController {
         return ResponseEntity.ok("Time criado com sucesso!");
     }
 
+    @GetMapping("/all")
+    public List<Team> listAllTeams() {
+        return teamService.findAll();
+    }
 
     // TIME ENVIAR CONVITE PARA PLAYER (USER)
     @PostMapping("/{id}/invite/send")

@@ -34,4 +34,7 @@ public class TeamService {
         return teamRepository.findById(id);
     }
 
+    public List<Team> findAll() {
+        return teamRepository.findAll();
+    }
 }

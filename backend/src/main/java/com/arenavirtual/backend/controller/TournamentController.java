@@ -5,10 +5,12 @@ import com.arenavirtual.backend.model.entity.tournament.Tournament;
 import com.arenavirtual.backend.service.TournamentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,6 +32,11 @@ public class TournamentController {
         System.out.println("-> " + tournament);
 
         return ResponseEntity.ok().body(tournament.toString() + "\n");
+    }
+
+    @GetMapping("/all")
+    public List<Tournament> listAllTournaments() {
+        return tournamentService.findAll();
     }
 
     @PostMapping("/create")

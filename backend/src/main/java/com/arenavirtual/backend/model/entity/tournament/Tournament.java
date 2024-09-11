@@ -35,12 +35,6 @@ public class Tournament {
     @JoinColumn(name="format_id")
     private Format format; // formato suiço, pontos corridos...
 
-    @OneToMany
-    private List<Team> teams;
-
-    @OneToMany
-    private List<Player> players;
-
     @Override
     public String toString() {
         return "Tournament{" +
