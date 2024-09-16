@@ -56,5 +56,4 @@ public class TournamentController {
 
         return ResponseEntity.ok("Campeonato criado com sucesso");
     }
-
 }

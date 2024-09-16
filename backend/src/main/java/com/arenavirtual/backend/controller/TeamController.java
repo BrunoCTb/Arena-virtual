@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,7 +32,7 @@ public class TeamController {
     UserService userService;
 
     @Autowired
-    InviteService inviteService;
+    InviteService inviteTeamService;
 
     @PostMapping("/create")
     public ResponseEntity<String> createTeam(@RequestBody TeamDTO dto) {
@@ -83,7 +84,7 @@ public class TeamController {
         InviteTeam inviteTeam = new InviteTeam(LocalDate.now(), teamFound.get().getCreatedBy(),
                 playerFound.get().getUser(), teamFound.get(), InviteStatus.PENDING);
 
-        inviteService.createInviteForTeam(inviteTeam);
+        inviteTeamService.createInviteForTeam(inviteTeam);
 
         return ResponseEntity.ok("Ok");
     }
@@ -108,10 +109,34 @@ public class TeamController {
         InviteTeam inviteTeam = new InviteTeam(LocalDate.now(), playerFound.get().getUser(), teamFound.get().getCreatedBy(),
                 teamFound.get(), InviteStatus.PENDING);
 
-        inviteService.createInviteForTeam(inviteTeam);
+        inviteTeamService.createInviteForTeam(inviteTeam);
 
         return ResponseEntity.ok("Solicitação para entrar no time " + teamFound.get().getName() + " criada com sucesso!");
     }
 
 
+    // Ver todos os convites que foram enviados pelo time
+    @GetMapping("/{teamId}/invite/invites/sent")
+    public List<InviteTeam> getSentInvitations(@PathVariable(name = "teamId") UUID teamId) {
+        // 1: buscar todos os convites que referenciam o time (ou seja, targetTeam é o time)
+        List<InviteTeam> invitations = inviteTeamService.findByTeamId(teamId);
+
+        // 2: filtrar os convites por apenas os que o time enviou, então:
+        // se o user que enviou for o mesmo do createdBy do time
+        return invitations.stream()
+                .filter(invite -> invite.getInvitedBy().equals(invite.getTeamTarget().getCreatedBy()))
+                .toList();
+    }
+
+    // Ver todos os convites que foram enviados pelo time
+    @GetMapping("/{teamId}/invite/invites/received")
+    public List<InviteTeam> getReceivedInvitations(@PathVariable(name = "teamId") UUID teamId) {
+        List<InviteTeam> invitations = inviteTeamService.findByTeamId(teamId);
+
+        // mesmo que o metodo acima, mas trocando quem recebe por quem envia,
+        // assim quem enviou é o player para o time, entao, os convites que o time recebeu
+        return invitations.stream()
+                .filter(invite -> invite.getInvitedTarget().equals(invite.getTeamTarget().getCreatedBy()))
+                .toList();
+    }
 }
