@@ -93,30 +93,25 @@ public class TeamController {
     // PLAYER SOLICITA PARA ENTRAR EM UM TIME
     @PostMapping("/{id}/joinrequest")
     public ResponseEntity<String> playerJoin(@PathVariable(name = "id") UUID id, @RequestBody InviteTeamDTO dto) {
-        Optional<Team> teamFound = teamService.findById(id);
-        if (teamFound.isEmpty()) {
-            return ResponseEntity.badRequest().body("Time não encontrado por id!");
-        }
+        Team team = teamService.findById(id).orElseThrow(() -> new IllegalArgumentException("Time não encontrado por id!"));
 
-        Optional<Player> playerFound = userService.findPlayerByPublicId(dto.playerToJoin());
-        if (playerFound.isEmpty()) {
-            return ResponseEntity.badRequest().body("Player não encotrado por seu id público!");
-        }
+        Player player = userService.findPlayerByPublicId(dto.playerToJoin()).
+                orElseThrow(() -> new IllegalArgumentException("Player não encotrado por seu id público!"));
 
-        if (!teamFound.get().getOpenToInvite()) {
+        if (!team.getOpenToInvite()) {
             return ResponseEntity.badRequest().body("O time não permite solicitações para entrar");
         }
 
-        if (playerFound.get().getUser().equals(teamFound.get().getCreatedBy())) {
+        if (player.getUser().equals(team.getCreatedBy())) {
             return ResponseEntity.badRequest().body("Não é possível enviar um convite para si mesmo");
         }
 
-        InviteTeam inviteTeam = new InviteTeam(LocalDate.now(), playerFound.get().getUser(), teamFound.get().getCreatedBy(),
-                teamFound.get(), InviteStatus.PENDING);
+        InviteTeam inviteTeam = new InviteTeam(LocalDate.now(), player.getUser(), team.getCreatedBy(),
+                team, InviteStatus.PENDING);
 
         inviteTeamService.createInviteForTeam(inviteTeam);
 
-        return ResponseEntity.ok("Solicitação para entrar no time " + teamFound.get().getName() + " criada com sucesso!");
+        return ResponseEntity.ok("Solicitação para entrar no time " + team.getName() + " criada com sucesso!");
     }
 
     // Ver todos os convites que foram enviados pelo time
@@ -158,7 +153,6 @@ public class TeamController {
         if (invite.isEmpty()) {
             return ResponseEntity.badRequest().body("convite não encontrado!");
         }
-
 
         // convite, resposta (aceita ou nao)
         inviteTeamService.inviteResponse(invite.get(), response.acceptInvite());
