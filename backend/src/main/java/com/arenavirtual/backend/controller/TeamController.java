@@ -65,25 +65,20 @@ public class TeamController {
     // TIME ENVIAR CONVITE PARA PLAYER (USER)
     @PostMapping("/{id}/invite/send")
     public ResponseEntity<String> teamSendInvite(@PathVariable(name = "id") UUID id, @RequestBody InviteTeamDTO dto) {
-        Optional<Player> playerFound = userService.findPlayerByPublicId(dto.playerToJoin());
-        if (playerFound.isEmpty()) {
-            return ResponseEntity.badRequest().body("Player não encotrado por seu id público!");
-        }
+        Player player = userService.findPlayerByPublicId(dto.playerToJoin())
+                .orElseThrow(() -> new IllegalArgumentException("Player não encotrado por seu id público!"));
 
-        Optional<Team> teamFound = teamService.findById(id);
-        if (teamFound.isEmpty()) {
-            return ResponseEntity.badRequest().body("Time não encontrado por id");
-        }
+        Team team = teamService.findById(id).orElseThrow(() -> new IllegalArgumentException("ime não encontrado por id"));
 
         // checar se o 'user' que faz referencia ao 'playerTarget' é o mesmo que o atributo created_by do time que esta convidando
         // ou seja: ver se o usuario esta enviando o convite para si mesmo
-        if (playerFound.get().getUser().equals(teamFound.get().getCreatedBy())) {
+        if (player.getUser().equals(team.getCreatedBy())) {
             return ResponseEntity.badRequest().body("Não é possível enviar um convite para si mesmo");
         }
 
         // caso encontre vai criar um novo convite com os dados do dto (quem envia, para quem, time que é o proprio e status)
-        InviteTeam inviteTeam = new InviteTeam(LocalDate.now(), teamFound.get().getCreatedBy(),
-                playerFound.get().getUser(), teamFound.get(), InviteStatus.PENDING);
+        InviteTeam inviteTeam = new InviteTeam(LocalDate.now(), team.getCreatedBy(),
+                player.getUser(), team, InviteStatus.PENDING);
 
         inviteTeamService.createInviteForTeam(inviteTeam);
 
