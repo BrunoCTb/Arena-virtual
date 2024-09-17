@@ -1,5 +1,6 @@
 package com.arenavirtual.backend.controller;
 
+import com.arenavirtual.backend.dto.InviteResponseDTO;
 import com.arenavirtual.backend.dto.InviteTeamDTO;
 import com.arenavirtual.backend.dto.TeamDTO;
 import com.arenavirtual.backend.model.entity.player.Player;
@@ -114,7 +115,6 @@ public class TeamController {
         return ResponseEntity.ok("Solicitação para entrar no time " + teamFound.get().getName() + " criada com sucesso!");
     }
 
-
     // Ver todos os convites que foram enviados pelo time
     @GetMapping("/{teamId}/invite/invites/sent")
     public List<InviteTeam> getSentInvitations(@PathVariable(name = "teamId") UUID teamId) {
@@ -139,4 +139,28 @@ public class TeamController {
                 .filter(invite -> invite.getInvitedTarget().equals(invite.getTeamTarget().getCreatedBy()))
                 .toList();
     }
+
+    // Resposta de convite do time -> para o player
+    @PostMapping("/{teamId}/invite/{inviteId}")
+    public ResponseEntity<String> teamInviteResponse(@PathVariable(name = "teamId") UUID teamId,
+                                                     @PathVariable(name = "inviteId") UUID inviteId,
+                                                     @RequestBody InviteResponseDTO response) {
+        Optional<Team> team = teamService.findById(teamId);
+        if (team.isEmpty()) {
+            return ResponseEntity.badRequest().body("time não encontrado!");
+        }
+
+        Optional<InviteTeam> invite = inviteTeamService.findById(inviteId);
+        if (invite.isEmpty()) {
+            return ResponseEntity.badRequest().body("convite não encontrado!");
+        }
+
+
+        // convite, resposta (aceita ou nao)
+        inviteTeamService.inviteResponse(invite.get(), response.acceptInvite());
+
+        return ResponseEntity.ok("ok");
+    }
+
+
 }
