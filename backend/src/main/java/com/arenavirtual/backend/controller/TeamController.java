@@ -107,6 +107,10 @@ public class TeamController {
             return ResponseEntity.badRequest().body("O time não permite solicitações para entrar");
         }
 
+        if (playerFound.get().getUser().equals(teamFound.get().getCreatedBy())) {
+            return ResponseEntity.badRequest().body("Não é possível enviar um convite para si mesmo");
+        }
+
         InviteTeam inviteTeam = new InviteTeam(LocalDate.now(), playerFound.get().getUser(), teamFound.get().getCreatedBy(),
                 teamFound.get(), InviteStatus.PENDING);
 
