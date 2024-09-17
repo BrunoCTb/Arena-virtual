@@ -41,16 +41,14 @@ public class TeamController {
             return ResponseEntity.badRequest().body("Nome do time já cadastrado!");
         }
 
-        Optional<User> userFound = userService.findByUsernameOrEmail(dto.userEmail(), dto.userEmail());
-        if (userFound.isEmpty()) {
-            return ResponseEntity.badRequest().body("Usuário não encotrado por email!");
-        }
+        User user = userService.findByUsernameOrEmail(dto.userEmail(), dto.userEmail()).
+        	orElseThrow(() -> new IllegalArgumentException("Usuário não encotrado por email!"));
 
         // add
         Team team = new Team();
         BeanUtils.copyProperties(dto, team);
 
-        team.setCreatedBy(userFound.get());
+        team.setCreatedBy(user);
 
         teamService.save(team);
 
@@ -139,20 +137,16 @@ public class TeamController {
     public ResponseEntity<String> teamInviteResponse(@PathVariable(name = "teamId") UUID teamId,
                                                      @PathVariable(name = "inviteId") UUID inviteId,
                                                      @RequestBody InviteResponseDTO response) {
-        Optional<Team> team = teamService.findById(teamId);
-        if (team.isEmpty()) {
-            return ResponseEntity.badRequest().body("time não encontrado!");
-        }
 
-        Optional<InviteTeam> invite = inviteTeamService.findById(inviteId);
-        if (invite.isEmpty()) {
-            return ResponseEntity.badRequest().body("convite não encontrado!");
-        }
+        teamService.findById(teamId).orElseThrow(() -> new IllegalArgumentException("time não encontrado!"));
+
+        InviteTeam invite = inviteTeamService.findById(inviteId).
+        		orElseThrow(() -> new IllegalArgumentException("convite não encontrado!"));
 
         // convite, resposta (aceita ou nao)
-        inviteTeamService.inviteResponse(invite.get(), response.acceptInvite());
+        inviteTeamService.inviteResponse(invite, response.acceptInvite());
 
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok("Player ");
     }
 
 
