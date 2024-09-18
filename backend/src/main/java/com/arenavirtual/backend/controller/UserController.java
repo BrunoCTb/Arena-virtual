@@ -1,5 +1,6 @@
 package com.arenavirtual.backend.controller;
 
+import com.arenavirtual.backend.dto.LoginDTO;
 import com.arenavirtual.backend.dto.PlayerDTO;
 import com.arenavirtual.backend.dto.UserDTO;
 import com.arenavirtual.backend.model.entity.player.Player;
@@ -8,6 +9,10 @@ import com.arenavirtual.backend.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +28,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    AuthenticationManager authenticationManager;
+
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserDTO dto) {
         if (userService.existsByUsernameOrEmail(dto.username(), dto.email())) {
@@ -33,11 +41,25 @@ public class UserController {
             return ResponseEntity.badRequest().body("Senhas não são iguais!");
         }
 
+        String encode = new BCryptPasswordEncoder().encode(dto.password());
+
         User newUser = new User();
         BeanUtils.copyProperties(dto, newUser);
+        newUser.setPassword(encode);
         userService.save(newUser);
 
         return ResponseEntity.ok("Usuário criado com sucesso!");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody LoginDTO dto) {
+        // faz uma "preparação" com os dados de user e password para depois autenticar de fato
+        UsernamePasswordAuthenticationToken userPassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
+
+        // autenticar o usuario baseado no user e password passados acima, que retorna o USER efetivamente com info de autenticação
+        Authentication authenticate = this.authenticationManager.authenticate(userPassword);
+
+        return ResponseEntity.ok("login feito");
     }
 
     @PostMapping("/player")
