@@ -5,6 +5,7 @@ import com.arenavirtual.backend.dto.PlayerDTO;
 import com.arenavirtual.backend.dto.UserDTO;
 import com.arenavirtual.backend.model.entity.player.Player;
 import com.arenavirtual.backend.model.entity.user.User;
+import com.arenavirtual.backend.security.JwtService;
 import com.arenavirtual.backend.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class UserController {
 
     @Autowired
     AuthenticationManager authenticationManager;
+
+    @Autowired
+    JwtService jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserDTO dto) {
@@ -59,7 +63,10 @@ public class UserController {
         // autenticar o usuario baseado no user e password passados acima, que retorna o USER efetivamente com info de autenticação
         Authentication authenticate = this.authenticationManager.authenticate(userPassword);
 
-        return ResponseEntity.ok("login feito");
+        // gerar o token e passar para o usuario acessar as rotas
+        String userToken = jwtService.generateToken((User) authenticate.getPrincipal());
+
+        return ResponseEntity.ok(userToken);
     }
 
     @PostMapping("/player")
