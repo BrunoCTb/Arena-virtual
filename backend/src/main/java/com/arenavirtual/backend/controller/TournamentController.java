@@ -45,13 +45,10 @@ public class TournamentController {
         if (tournamentService.existsByTitle(dto.title())) {
             ResponseEntity.badRequest().body("Já há um campeonato criado com esse nome");
         }
-
-        System.out.println(dto);
+        
         // adicionar o torneio
         Tournament newTournament = new Tournament();
         BeanUtils.copyProperties(dto, newTournament);
-
-        System.out.println(newTournament);
 
 //        tournamentService.save(newTournament);
 
