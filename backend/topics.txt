@@ -4,12 +4,13 @@
   x   - Finalizada com potencial de melhora
   .   - Em andamento
   *   - Finalizada nao exatamente da melhor maneira
+  c   - Foco atual (current)
 
 )
 
 [x] Autenticacao e autorizacao
 [ ] Frontend
 [*] Database (relacionamento de entidades, criacoes por padroes, etc)
-[ ] Funcionamento da app em si (inicio de campeonatos, relacionamento de usuarios, etc) 
+[c] Funcionamento da app em si (inicio de campeonatos, relacionamento de usuarios, etc)
 [.] Documentacao da api (github)
 
