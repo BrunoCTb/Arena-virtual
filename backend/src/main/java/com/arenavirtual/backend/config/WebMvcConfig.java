@@ -12,6 +12,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         // link provisorio para o live server do html
-        registry.addMapping("/").allowedOrigins("http://localhost:5500");
+    	registry
+    		.addMapping("/**")
+    		.allowedOrigins("http://localhost:5500")
+    		.allowedMethods("PUT", "GET", "DELETE", "OPTIONS", "PATCH", "POST");
     }
 }

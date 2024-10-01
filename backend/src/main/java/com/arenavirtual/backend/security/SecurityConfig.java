@@ -26,11 +26,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf((csrf) -> csrf.disable())
-                .cors(c -> c.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(HttpMethod.GET, "/" ,"/inicio").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/user/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/" ,"/inicio", "/user/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user/register", "/user/test").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/login").permitAll()
                         .anyRequest().authenticated()
                 )
