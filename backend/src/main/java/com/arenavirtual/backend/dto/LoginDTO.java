@@ -1,7 +1,7 @@
 package com.arenavirtual.backend.dto;
 
 public record LoginDTO(
-    String email,
+    String login,
     String password
 ) {
 }

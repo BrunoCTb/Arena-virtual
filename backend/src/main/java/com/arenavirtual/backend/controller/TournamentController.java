@@ -16,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/tournament")
+@CrossOrigin("*")
 public class TournamentController {
 
     @Autowired
@@ -36,6 +37,7 @@ public class TournamentController {
 
     @GetMapping("/all")
     public List<Tournament> listAllTournaments() {
+    	System.out.println("list");
         return tournamentService.findAll();
     }
 
@@ -50,7 +52,7 @@ public class TournamentController {
         Tournament newTournament = new Tournament();
         BeanUtils.copyProperties(dto, newTournament);
 
-//        tournamentService.save(newTournament);
+        tournamentService.save(newTournament);
 
 
         return ResponseEntity.ok("Campeonato criado com sucesso");

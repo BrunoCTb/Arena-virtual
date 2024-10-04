@@ -1,9 +1,10 @@
 package com.arenavirtual.backend.controller;
 
 import com.arenavirtual.backend.dto.LoginDTO;
+import com.arenavirtual.backend.dto.LoginTokenDTO;
 import com.arenavirtual.backend.dto.PlayerDTO;
-import com.arenavirtual.backend.dto.TestDTO;
 import com.arenavirtual.backend.dto.UserDTO;
+import com.arenavirtual.backend.dto.UserResponse;
 import com.arenavirtual.backend.model.entity.player.Player;
 import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.security.JwtService;
@@ -14,12 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
@@ -39,11 +42,6 @@ public class UserController {
     @Autowired
     JwtService jwtService;
     
-    @GetMapping("/register")
-    public ResponseEntity<String> registerUserPage() {
-    	return ResponseEntity.ok("ok");
-    }
-
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserDTO dto) {
     	System.out.println(dto);
@@ -64,7 +62,7 @@ public class UserController {
         BeanUtils.copyProperties(dto, newUser);
         newUser.setPassword(encode);
         
-//        userService.save(newUser);
+        userService.save(newUser);
 
         System.out.println(newUser);
 
@@ -72,17 +70,19 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginDTO dto) {
+    public ResponseEntity<LoginTokenDTO> loginUser(@RequestBody LoginDTO dto) {
+    	System.out.println(dto);
+    	
         // faz uma "preparação" com os dados de user e password para depois autenticar de fato
-        UsernamePasswordAuthenticationToken userPassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
+        UsernamePasswordAuthenticationToken userPassword = new UsernamePasswordAuthenticationToken(dto.login(), dto.password());
 
         // autenticar o usuario baseado no user e password passados acima, que retorna o USER efetivamente com info de autenticação
         Authentication authenticate = this.authenticationManager.authenticate(userPassword);
 
         // gerar o token e passar para o usuario acessar as rotas
         String userToken = jwtService.generateToken((User) authenticate.getPrincipal());
-
-        return ResponseEntity.ok(userToken);
+        
+        return ResponseEntity.ok(new LoginTokenDTO(userToken));
     }
 
     @PostMapping("/player")
@@ -102,4 +102,17 @@ public class UserController {
         return ResponseEntity.ok().body(userToPlayer.toString());
     } 
 
+    
+    @GetMapping("/auth")
+    public ResponseEntity isAuth() {
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	
+    	// true se estiver logado
+    	Boolean getAuth = !auth.getPrincipal().equals("anonymousUser");
+
+        System.out.println(getAuth);
+
+    	return ResponseEntity.ok(getAuth);
+    }
+    
 }
