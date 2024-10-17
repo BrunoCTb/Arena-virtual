@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,7 +32,5 @@ public class Team {
     @JoinColumn(name = "created_by")
     private User createdBy;
 
-    @OneToOne
-    private TeamStats teamStats;
 
 }

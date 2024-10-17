@@ -1,7 +1,9 @@
 package com.arenavirtual.backend.service;
 
 import com.arenavirtual.backend.model.entity.team.Team;
+import com.arenavirtual.backend.model.entity.team.TeamStats;
 import com.arenavirtual.backend.repository.TeamRepository;
+import com.arenavirtual.backend.repository.TeamStatsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,9 @@ public class TeamService {
 
     @Autowired
     TeamRepository teamRepository;
+
+    @Autowired
+    TeamStatsRepository teamStatsRepository;
 
     @Transactional
     public void save(Team team) {
@@ -36,5 +41,14 @@ public class TeamService {
 
     public List<Team> findAll() {
         return teamRepository.findAll();
+    }
+
+    public List<Team> getTeamsByTournament(UUID tournamentId) {
+        return null;
+//        return teamStatsRepository.findTeamsByTournamentId(tournamentId);
+    }
+
+    public void createTeamStats(TeamStats teamStats) {
+        teamStatsRepository.save(teamStats);
     }
 }

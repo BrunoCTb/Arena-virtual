@@ -13,6 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@Table(name = "team_stats")
 public class TeamStats {
 
     @Id
@@ -24,13 +25,16 @@ public class TeamStats {
     private Integer matchesPlayed;
     private Integer currentPosition;
 
-    @OneToOne
+    @ManyToOne // Um time pode ter várias estatísticas em diferentes campeonatos
+    @JoinColumn(name = "team_id")
     private Team team;
 
-    @OneToOne
-    private Tournament Tournament;
+    @ManyToOne // Um time pode participar de vários torneios
+    @JoinColumn(name = "tournament_id")
+    private Tournament tournament;
 
-    public TeamStats(Team team) {
+    public TeamStats(Team team, Tournament tournament) {
         this.team = team;
+        this.tournament = tournament;
     }
 }
