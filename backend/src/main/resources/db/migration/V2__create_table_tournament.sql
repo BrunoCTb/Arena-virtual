@@ -4,9 +4,11 @@ CREATE TABLE tournament (
     title VARCHAR(250),
     modality VARCHAR(100),
     online_mode BOOLEAN,
-    teams_quantity INTEGER,
+    min_teams INTEGER,
+    max_teams INTEGER,
     image_representation_url VARCHAR(250),
-    format_id BINARY(16),
-    FOREIGN KEY (format_id) REFERENCES format(id)
+    format VARCHAR(250)
+--    format_id BINARY(16),
+--    FOREIGN KEY (format_id) REFERENCES format(id)
 
 )

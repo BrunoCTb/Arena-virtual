@@ -2,6 +2,8 @@ package com.arenavirtual.backend.model.entity.tournament;
 
 import com.arenavirtual.backend.model.entity.player.Player;
 import com.arenavirtual.backend.model.entity.team.Team;
+import com.arenavirtual.backend.model.tournamentStatus.TournamentProgressStatus;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,25 +28,23 @@ public class Tournament {
     private String modality; // futebol, jogo especifico...
     @Column(name = "onlineMode")
     private Boolean onlineMode; // outros usuarios poderao entrar
-    @Column(name = "teamsQuantity")
-    private Integer teamsQuantity;
+    @Column(name = "minTeams")
+    private Integer minTeams;
+    @Column(name = "maxTeams")
+    private Integer maxTeams;
     @Column(name = "imageRepresentationUrl")
     private String imageRepresentationUrl;
+//    @Column(name = "status")
+//    private TournamentProgressStatus status; // nao iniciado, em andamento e finalizado
 
-    @ManyToOne
-    @JoinColumn(name="format_id")
-    private Format format; // formato suiço, pontos corridos...
+    private StyleFormat format; // formato suiço, pontos corridos...
 
-    @Override
-    public String toString() {
-        return "Tournament{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", modality='" + modality + '\'' +
-                ", onlineMode=" + onlineMode +
-                ", teamsQuantity=" + teamsQuantity +
-                ", imageRepresentationUrl='" + imageRepresentationUrl + '\'' +
-                ", format=" + format +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "Tournament [id=" + id + ", title=" + title + ", modality=" + modality + ", onlineMode=" + onlineMode
+				+ ", minTeams=" + minTeams + ", maxTeams=" + maxTeams + ", imageRepresentationUrl="
+				+ imageRepresentationUrl + ", format=" + format + "]";
+	}
+
+    
 }

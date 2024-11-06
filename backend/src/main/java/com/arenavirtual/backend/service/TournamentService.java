@@ -53,4 +53,18 @@ public class TournamentService {
                 .map(ts -> ts.getTeam())
                 .toList();
 	}
+
+	// valida se os atributos atuais sao validos para poder iniciar
+	public boolean isValidToStart(Tournament tournament) {
+		List<Team> tournamentTeams = this.findAllTeams(tournament.getId());
+		
+		// nao esta na quantidade de times requerida
+		if (!(tournamentTeams.size() > tournament.getMinTeams() && tournamentTeams.size() < tournament.getMinTeams())) {
+			return false;
+		}
+		
+		
+		return true;
+	}
+	
 }

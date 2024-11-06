@@ -43,11 +43,6 @@ public class TeamService {
         return teamRepository.findAll();
     }
 
-    public List<Team> getTeamsByTournament(UUID tournamentId) {
-        return null;
-//        return teamStatsRepository.findTeamsByTournamentId(tournamentId);
-    }
-
     public void createTeamStats(TeamStats teamStats) {
         teamStatsRepository.save(teamStats);
     }

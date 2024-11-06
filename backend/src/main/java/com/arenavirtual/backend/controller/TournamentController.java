@@ -1,8 +1,10 @@
 package com.arenavirtual.backend.controller;
 
 import com.arenavirtual.backend.dto.TournamentDTO;
+import com.arenavirtual.backend.dto.tournament.StartTournamentDTO;
 import com.arenavirtual.backend.model.entity.team.Team;
 import com.arenavirtual.backend.model.entity.team.TeamStats;
+import com.arenavirtual.backend.model.entity.tournament.Format;
 import com.arenavirtual.backend.model.entity.tournament.Tournament;
 import com.arenavirtual.backend.service.TeamService;
 import com.arenavirtual.backend.service.TournamentService;
@@ -65,6 +67,10 @@ public class TournamentController {
     
     @GetMapping("/{tournamentId}/findteams")
 	public List<Team> findTournamentTeams(@PathVariable("tournamentId") UUID tournamentId) {
+        if (tournamentService.findAllTeams(tournamentId).isEmpty()) {
+            throw new IllegalArgumentException("Campeonato não encontrado!");
+        }
+
     	return tournamentService.findAllTeams(tournamentId);
     }
 
@@ -80,6 +86,46 @@ public class TournamentController {
         teamService.createTeamStats(teamStats);
 
         return ResponseEntity.ok("team stats criado!");
+    }
+    
+    // metodo que ira servir apenas para realizar as primeiras configurações do campeonato,
+    // ou seja, neste ponto o campeonato nao foi 'startado', com isso,
+    // serao realizadas coisas como realizar as divisoes dos times, criar as partidas iniciais, salvar os times no db
+    @PostMapping("/{tournamentId}/start")
+    public ResponseEntity<String> startTournament(@PathVariable("tournamentId") UUID tournamentId, StartTournamentDTO dto) {
+    	
+    	Format formatMataMata = new Format("mata-mata", 2, 1, "apenas um time ira passar, nesse caso campeao");
+    	
+    	Tournament tournament = tournamentService.findById(tournamentId)
+    			.orElseThrow(() -> new IllegalArgumentException("Torneio não encontrado"));
+    	
+    	if (dto.start() != true) {
+    		return ResponseEntity.badRequest().body("solicitação inváilida");
+    	}    	
+    	
+    	// topicos importantes para validar um inicio:
+    	// - numero de times deve estar entre a correspondencia
+    	if (!tournamentService.isValidToStart(tournament)) {
+    		return ResponseEntity.badRequest().body("Condições do campeonato inválidas para poder iniciar!");
+    	}
+    	
+    	// * se estiver com todas as condicoes validas:
+    	
+    	// pegar os times do campeonato e gerar a separacao e armazenar em memoria
+    	List<Team> tournamentTeams = tournamentService.findAllTeams(tournamentId);
+    	
+
+    	// salvar os times em uma matriz no db
+    	
+    	// gerar as partidas a partir da separacao realizada
+    	
+    	// salvar cada partida no db em 'Match'
+    	
+    	// modificar o status para iniciado
+    	
+    	
+    	
+    	return ResponseEntity.ok("campeonato iniciado [BÁSICO]");
     }
 
 }
