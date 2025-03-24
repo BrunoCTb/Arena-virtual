@@ -8,6 +8,7 @@ import com.arenavirtual.backend.model.entity.team.InviteTeam;
 import com.arenavirtual.backend.model.entity.team.Team;
 import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.model.inviteStatus.InviteStatus;
+import com.arenavirtual.backend.service.AuthService;
 import com.arenavirtual.backend.service.InviteService;
 import com.arenavirtual.backend.service.TeamService;
 import com.arenavirtual.backend.service.UserService;
@@ -17,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -105,6 +105,30 @@ public class TeamController {
         inviteTeamService.createInviteForTeam(inviteTeam);
 
         return ResponseEntity.ok("Solicitação para entrar no time " + team.getName() + " criada com sucesso!");
+    }
+
+    @GetMapping("/{username}/received")
+    public void getUserReceivedInvitations(@PathVariable(name="username") String username) {
+        // ex: localhost:8080/team/{username123}
+
+        Optional<User> u = userService.findByUsernameOrEmail(username, username);
+        if (!u.isEmpty()) {
+            System.out.println("convites recebidos");
+            List<InviteTeam> invites = inviteTeamService.findReceivedInvitations(u.get());
+            System.out.println(invites);
+        }
+    }
+
+    @GetMapping("/{username}/sent")
+    public void getUserSentInvitations(@PathVariable(name="username") String username) {
+        // ex: localhost:8080/team/{username123}
+
+        Optional<User> u = userService.findByUsernameOrEmail(username, username);
+        if (!u.isEmpty()) {
+            System.out.println("convites enviados:");
+            List<InviteTeam> invites = inviteTeamService.findSentInvitations(u.get());
+            System.out.println(invites);
+        }
     }
 
     // Ver todos os convites que foram enviados pelo time

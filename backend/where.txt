@@ -1,0 +1,31 @@
+ONDE ESTOU:
+
+  - Sistema de pré-início do campeonato
+
+    *requisitos:
+    >> Só pode ser "iniciado" manualmente
+    >> Validar a quantidade de times
+    >> Só será "iniciado" diante as condições necessárias (qtd times)
+
+    *funcionalidades:
+    >> Realiza a separação dos times (baseado no formato)
+    >> Cria as partidas até onde vai a separação dos times (ex: mata-mata cria apenas cada round, pontos corridos cria todas)
+    >> Assim como as condições do campeonato, há condições dos times (ex: qtd jogadores)
+
+
+
+
+=============================================================================================================================
+
+TAREFAS:
+
+  - Sistema de iniciar o campeonato
+
+    *requisitos:
+    >> Pode ser iniciado programado ou manualmente
+    >> O unico que pode iniciar é o "host", ou seja, quem criou
+    >> Receber um boolean para inicio
+
+    *funcionalidades:
+    >> Todos os players do time precisam estar logado e dar pronto para iniciar a partida, ou então é W.O para o outro time
+    >> Apos a ultima partida que foi gerada no 'pré-inicio', se houver mais, gerar baseado na regra de negócio

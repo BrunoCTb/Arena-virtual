@@ -5,7 +5,6 @@ import com.arenavirtual.backend.model.entity.team.InviteTeam;
 import com.arenavirtual.backend.model.entity.team.Team;
 import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.repository.InviteRepository;
-import com.arenavirtual.backend.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +48,14 @@ public class InviteService {
         }
 
         return inviteRepository.findByTeamTarget(team.get());
+    }
+
+    public List<InviteTeam> findReceivedInvitations(User user) {
+        return inviteRepository.findByInvitedTarget(user);
+    }
+
+    public List<InviteTeam> findSentInvitations(User user) {
+        return inviteRepository.findByInvitedBy(user);
     }
 
     // lidar com a resposta do time para o player e vice-versa
