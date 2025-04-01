@@ -4,8 +4,11 @@ import com.arenavirtual.backend.model.entity.player.Player;
 import com.arenavirtual.backend.model.entity.team.InviteTeam;
 import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.service.InviteService;
+import com.arenavirtual.backend.service.PlayerService;
 import com.arenavirtual.backend.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +23,9 @@ public class PlayerController {
 
     @Autowired
     InviteService inviteService;
+
+    @Autowired
+    PlayerService playerService;
 
 
     @GetMapping("/{username}/invites/received")
@@ -46,5 +52,21 @@ public class PlayerController {
         return List.of();
     }
 
+    @GetMapping("/players")
+    public List<Player> getAllPlayers() {
+        return playerService.findAll();
+    }
+
+    @GetMapping("/player/{playerId}")
+    public ResponseEntity<Player> getPlayer(@PathVariable(name = "playerId") Long playerId) {
+        Optional<Player> player = userService.findPlayerByPublicId(playerId);
+
+        if (player.isEmpty()) {
+            throw new EntityNotFoundException("player nao encontrado");
+        }
+
+        return ResponseEntity.ok(player.get());
+
+    }
 
 }
