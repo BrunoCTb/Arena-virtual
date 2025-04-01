@@ -107,31 +107,8 @@ public class TeamController {
         return ResponseEntity.ok("Solicitação para entrar no time " + team.getName() + " criada com sucesso!");
     }
 
-    @GetMapping("/{username}/received")
-    public void getUserReceivedInvitations(@PathVariable(name="username") String username) {
-        // ex: localhost:8080/team/{username123}
 
-        Optional<User> u = userService.findByUsernameOrEmail(username, username);
-        if (!u.isEmpty()) {
-            System.out.println("convites recebidos");
-            List<InviteTeam> invites = inviteTeamService.findReceivedInvitations(u.get());
-            System.out.println(invites);
-        }
-    }
-
-    @GetMapping("/{username}/sent")
-    public void getUserSentInvitations(@PathVariable(name="username") String username) {
-        // ex: localhost:8080/team/{username123}
-
-        Optional<User> u = userService.findByUsernameOrEmail(username, username);
-        if (!u.isEmpty()) {
-            System.out.println("convites enviados:");
-            List<InviteTeam> invites = inviteTeamService.findSentInvitations(u.get());
-            System.out.println(invites);
-        }
-    }
-
-    // Ver todos os convites que foram enviados pelo time
+    // Ver todos os convites do time que foram enviados
     @GetMapping("/{teamId}/invite/invites/sent")
     public List<InviteTeam> getSentInvitations(@PathVariable(name = "teamId") UUID teamId) {
         // 1: buscar todos os convites que referenciam o time (ou seja, targetTeam é o time)
@@ -144,7 +121,7 @@ public class TeamController {
                 .toList();
     }
 
-    // Ver todos os convites que foram enviados pelo time
+    // Ver todos os convites do time que foram recebidos
     @GetMapping("/{teamId}/invite/invites/received")
     public List<InviteTeam> getReceivedInvitations(@PathVariable(name = "teamId") UUID teamId) {
         List<InviteTeam> invitations = inviteTeamService.findByTeamId(teamId);
