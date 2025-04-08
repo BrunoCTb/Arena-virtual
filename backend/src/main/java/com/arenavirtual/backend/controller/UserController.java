@@ -6,8 +6,10 @@ import com.arenavirtual.backend.dto.PlayerDTO;
 import com.arenavirtual.backend.dto.UserDTO;
 import com.arenavirtual.backend.dto.UserResponse;
 import com.arenavirtual.backend.model.entity.player.Player;
+import com.arenavirtual.backend.model.entity.team.Team;
 import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.security.JwtService;
+import com.arenavirtual.backend.service.AuthService;
 import com.arenavirtual.backend.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -105,7 +108,18 @@ public class UserController {
         return ResponseEntity.ok().body(userToPlayer.toString());
     } 
 
-    
+    @GetMapping("/my/teams")
+    public List<Team> getCreatedTeams() {
+        // user logado
+        Optional<User> user = userService.getLoggedUser();
+
+        if (user.isPresent()) {
+            return userService.findCreatedTeams(user.get());
+        }
+
+        return List.of();
+    }
+
     @GetMapping("/auth")
     public ResponseEntity isAuth() {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -128,6 +142,5 @@ public class UserController {
 
         throw new EntityNotFoundException("Não há usuário logado");
     }
-
     
 }

@@ -1,9 +1,11 @@
 package com.arenavirtual.backend.repository;
 
 import com.arenavirtual.backend.model.entity.team.Team;
+import com.arenavirtual.backend.model.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,4 +15,7 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
     boolean existsByName(String name);
 
     Optional<Team> findByName(String name);
+
+    List<Team> findByCreatedBy(User user);
+
 }

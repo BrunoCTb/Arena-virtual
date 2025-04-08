@@ -1,13 +1,18 @@
 package com.arenavirtual.backend.service;
 
 import com.arenavirtual.backend.model.entity.player.Player;
+import com.arenavirtual.backend.model.entity.team.Team;
 import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.repository.PlayerRepository;
+import com.arenavirtual.backend.repository.TeamRepository;
 import com.arenavirtual.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,6 +23,9 @@ public class UserService {
 
     @Autowired
     PlayerRepository playerRepository;
+
+    @Autowired
+    TeamRepository teamRepository;
 
     public boolean existsByUsernameOrEmail(String username, String email) {
         return userRepository.existsByUsernameOrEmail(username, email);
@@ -51,6 +59,21 @@ public class UserService {
 
     public Optional<Player> findPlayerByUser(User user) {
         return playerRepository.findByUser(user);
+    }
+
+    public List<Team> findCreatedTeams(User user) {
+        return teamRepository.findByCreatedBy(user);
+    }
+
+    public Optional<User> getLoggedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!auth.getPrincipal().equals("anonymousUser")) {
+            return Optional.of((User) auth.getPrincipal());
+        }
+
+        return Optional.empty();
+
     }
 
 }
