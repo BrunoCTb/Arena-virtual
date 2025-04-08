@@ -9,6 +9,8 @@ import com.arenavirtual.backend.model.entity.player.Player;
 import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.security.JwtService;
 import com.arenavirtual.backend.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 @CrossOrigin("*")
@@ -114,5 +117,17 @@ public class UserController {
 
     	return ResponseEntity.ok(getAuth);
     }
+
+    @GetMapping("/auth/get")
+    public ResponseEntity<User> whoIsAuth() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!auth.getPrincipal().equals("anonymousUser")) {
+            return ResponseEntity.ok((User) auth.getPrincipal());
+        }
+
+        throw new EntityNotFoundException("Não há usuário logado");
+    }
+
     
 }
