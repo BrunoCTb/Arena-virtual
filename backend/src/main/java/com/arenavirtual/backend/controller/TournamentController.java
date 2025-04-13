@@ -8,6 +8,7 @@ import com.arenavirtual.backend.model.entity.tournament.Format;
 import com.arenavirtual.backend.model.entity.tournament.Tournament;
 import com.arenavirtual.backend.service.TeamService;
 import com.arenavirtual.backend.service.TournamentService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +30,10 @@ public class TournamentController {
     @Autowired
     TeamService teamService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<String> getTournament(@PathVariable("id") UUID id) {
-        Optional<Tournament> tournament = tournamentService.findById(id);
-
-        if (tournament.isEmpty()) {
-            return ResponseEntity.badRequest().body("Torneio não encontrado");
-        }
-
-        System.out.println("-> " + tournament);
-
-        return ResponseEntity.ok().body(tournament.toString() + "\n");
+    @GetMapping("/{tournamentId}")
+    public ResponseEntity<Tournament> getTournament(@PathVariable("id") UUID tournamentId) {
+        return ResponseEntity.ok(tournamentService.findById(tournamentId).
+                orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado!")));
     }
 
     @GetMapping("/all")
