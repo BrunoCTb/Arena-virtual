@@ -12,6 +12,7 @@ import com.arenavirtual.backend.service.AuthService;
 import com.arenavirtual.backend.service.InviteService;
 import com.arenavirtual.backend.service.TeamService;
 import com.arenavirtual.backend.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/team")
+@CrossOrigin("*")
 public class TeamController {
 
     @Autowired
@@ -55,6 +57,12 @@ public class TeamController {
         return ResponseEntity.ok("Time criado com sucesso!");
     }
 
+    @GetMapping("/{teamId}")
+    public ResponseEntity<Team> getTeam(@RequestBody @PathVariable("teamId") UUID teamId) {
+        return ResponseEntity.ok(teamService.findById(teamId)
+                .orElseThrow(() -> new EntityNotFoundException("Time não encontrado!")));
+    }
+
     @GetMapping("/all")
     public List<Team> listAllTeams() {
         return teamService.findAll();
@@ -62,8 +70,8 @@ public class TeamController {
 
     // TIME ENVIAR CONVITE PARA PLAYER (USER)
     @PostMapping("/{id}/invite/send")
-    public ResponseEntity<String> teamSendInvite(@PathVariable(name = "id") UUID id, @RequestBody InviteTeamDTO dto) {
-        Player player = userService.findPlayerByPublicId(dto.playerToJoin())
+    public ResponseEntity<String> teamSendInvite(@RequestBody @PathVariable(name = "id") UUID id, @RequestBody InviteTeamDTO dto) {
+                Player player = userService.findPlayerByPublicId(dto.playerPublicId())
                 .orElseThrow(() -> new IllegalArgumentException("Player não encotrado por seu id público!"));
 
         Team team = teamService.findById(id).orElseThrow(() -> new IllegalArgumentException("ime não encontrado por id"));
@@ -79,6 +87,7 @@ public class TeamController {
                 player.getUser(), team, InviteStatus.PENDING);
 
         inviteTeamService.createInviteForTeam(inviteTeam);
+//        System.out.println(inviteTeam);
 
         return ResponseEntity.ok("Ok");
     }
@@ -88,7 +97,7 @@ public class TeamController {
     public ResponseEntity<String> playerJoin(@PathVariable(name = "id") UUID id, @RequestBody InviteTeamDTO dto) {
         Team team = teamService.findById(id).orElseThrow(() -> new IllegalArgumentException("Time não encontrado por id!"));
 
-        Player player = userService.findPlayerByPublicId(dto.playerToJoin()).
+        Player player = userService.findPlayerByPublicId(dto.playerPublicId()).
                 orElseThrow(() -> new IllegalArgumentException("Player não encotrado por seu id público!"));
 
         if (!team.getOpenToInvite()) {
