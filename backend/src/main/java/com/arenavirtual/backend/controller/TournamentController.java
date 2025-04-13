@@ -31,7 +31,7 @@ public class TournamentController {
     TeamService teamService;
 
     @GetMapping("/{tournamentId}")
-    public ResponseEntity<Tournament> getTournament(@PathVariable("id") UUID tournamentId) {
+    public ResponseEntity<Tournament> getTournament(@PathVariable("tournamentId") UUID tournamentId) {
         return ResponseEntity.ok(tournamentService.findById(tournamentId).
                 orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado!")));
     }
