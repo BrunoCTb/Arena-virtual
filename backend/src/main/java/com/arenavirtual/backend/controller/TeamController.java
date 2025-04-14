@@ -43,8 +43,8 @@ public class TeamController {
             return ResponseEntity.badRequest().body("Nome do time já cadastrado!");
         }
 
-        User user = userService.findByUsernameOrEmail(dto.userEmail(), dto.userEmail()).
-        	orElseThrow(() -> new IllegalArgumentException("Usuário não encotrado por email!"));
+        User user = userService.getLoggedUser()
+                .orElseThrow(() -> new EntityNotFoundException("usuário não logado"));
 
         // add
         Team team = new Team();
