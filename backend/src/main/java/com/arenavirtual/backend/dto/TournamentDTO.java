@@ -4,7 +4,8 @@ public record TournamentDTO(
         String title,
         String modality,
         Boolean onlineMode,
-        Integer teamsQuantity,
+        Integer minTeams,
+        Integer maxTeams,
         String imageRepresentationUrl,
         String format
 ) {
