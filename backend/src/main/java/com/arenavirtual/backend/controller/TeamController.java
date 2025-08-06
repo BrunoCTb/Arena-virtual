@@ -65,11 +65,9 @@ public class TeamController {
 
 
     @GetMapping("/{teamId}/players")
-    public ResponseEntity<String> getPlayers(@RequestBody @PathVariable("teamId") UUID teamId) {
-        List<Player> p = teamService.findByPlayers((teamId));
-        System.out.println(p);
+    public List<Player> getPlayers(@RequestBody @PathVariable("teamId") UUID teamId) {
 
-        return ResponseEntity.ok("ok");
+        return teamService.findByPlayers((teamId));
     }
 
     @GetMapping("/all")
@@ -80,13 +78,15 @@ public class TeamController {
     // TIME ENVIAR CONVITE PARA PLAYER (USER)
     @PostMapping("/{id}/invite/send")
     public ResponseEntity<String> teamSendInvite(@RequestBody @PathVariable(name = "id") UUID id, @RequestBody InviteTeamDTO dto) {
-                Player player = userService.findPlayerByPublicId(dto.playerPublicId())
+        Player player = userService.findPlayerByPublicId(dto.playerPublicId())
                 .orElseThrow(() -> new IllegalArgumentException("Player não encotrado por seu id público!"));
 
         Team team = teamService.findById(id).orElseThrow(() -> new IllegalArgumentException("ime não encontrado por id"));
 
         // checar se o 'user' que faz referencia ao 'playerTarget' é o mesmo que o atributo created_by do time que esta convidando
         // ou seja: ver se o usuario esta enviando o convite para si mesmo
+
+
         if (player.getUser().equals(team.getCreatedBy())) {
             return ResponseEntity.badRequest().body("Não é possível enviar um convite para si mesmo");
         }
