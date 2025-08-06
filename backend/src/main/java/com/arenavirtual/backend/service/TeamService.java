@@ -1,7 +1,9 @@
 package com.arenavirtual.backend.service;
 
+import com.arenavirtual.backend.model.entity.player.Player;
 import com.arenavirtual.backend.model.entity.team.Team;
 import com.arenavirtual.backend.model.entity.team.TeamStats;
+import com.arenavirtual.backend.repository.PlayerRepository;
 import com.arenavirtual.backend.repository.TeamRepository;
 import com.arenavirtual.backend.repository.TeamStatsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class TeamService {
     @Autowired
     TeamStatsRepository teamStatsRepository;
 
+    @Autowired
+    PlayerRepository playerRepository;
+
     @Transactional
     public void save(Team team) {
         try {
@@ -29,6 +34,10 @@ public class TeamService {
         } catch (Exception e) {
             System.out.println("Exception ---> " + e);
         }
+    }
+
+    public List<Player> findByPlayers(UUID teamId) {
+        return playerRepository.findByTeamId(teamId);
     }
 
     public boolean existsByName(String name) {

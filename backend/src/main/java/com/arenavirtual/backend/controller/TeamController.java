@@ -2,13 +2,14 @@ package com.arenavirtual.backend.controller;
 
 import com.arenavirtual.backend.dto.InviteResponseDTO;
 import com.arenavirtual.backend.dto.InviteTeamDTO;
-import com.arenavirtual.backend.dto.TeamDTO;
+import com.arenavirtual.backend.dto.team.TeamDTO;
+import com.arenavirtual.backend.dto.team.TeamFullDTO;
+import com.arenavirtual.backend.dto.team.TeamStatsDTO;
 import com.arenavirtual.backend.model.entity.player.Player;
 import com.arenavirtual.backend.model.entity.team.InviteTeam;
 import com.arenavirtual.backend.model.entity.team.Team;
 import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.model.inviteStatus.InviteStatus;
-import com.arenavirtual.backend.service.AuthService;
 import com.arenavirtual.backend.service.InviteService;
 import com.arenavirtual.backend.service.TeamService;
 import com.arenavirtual.backend.service.UserService;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -61,6 +61,15 @@ public class TeamController {
     public ResponseEntity<Team> getTeam(@RequestBody @PathVariable("teamId") UUID teamId) {
         return ResponseEntity.ok(teamService.findById(teamId)
                 .orElseThrow(() -> new EntityNotFoundException("Time não encontrado!")));
+    }
+
+
+    @GetMapping("/{teamId}/players")
+    public ResponseEntity<String> getPlayers(@RequestBody @PathVariable("teamId") UUID teamId) {
+        List<Player> p = teamService.findByPlayers((teamId));
+        System.out.println(p);
+
+        return ResponseEntity.ok("ok");
     }
 
     @GetMapping("/all")

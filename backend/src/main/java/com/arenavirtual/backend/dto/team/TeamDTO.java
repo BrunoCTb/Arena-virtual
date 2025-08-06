@@ -1,9 +1,8 @@
-package com.arenavirtual.backend.dto;
+package com.arenavirtual.backend.dto.team;
 
 public record TeamDTO(
         String name,
         Boolean openToInvite,
-//        String userEmail,
         String logoUrl
 )
 {

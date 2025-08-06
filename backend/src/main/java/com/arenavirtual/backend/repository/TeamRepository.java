@@ -1,5 +1,6 @@
 package com.arenavirtual.backend.repository;
 
+import com.arenavirtual.backend.model.entity.player.Player;
 import com.arenavirtual.backend.model.entity.team.Team;
 import com.arenavirtual.backend.model.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
