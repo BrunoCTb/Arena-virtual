@@ -2,9 +2,11 @@ package com.arenavirtual.backend.service;
 
 import com.arenavirtual.backend.model.entity.player.Player;
 import com.arenavirtual.backend.model.entity.team.Team;
+import com.arenavirtual.backend.model.entity.tournament.Tournament;
 import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.repository.PlayerRepository;
 import com.arenavirtual.backend.repository.TeamRepository;
+import com.arenavirtual.backend.repository.TournamentRepository;
 import com.arenavirtual.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -26,6 +28,9 @@ public class UserService {
 
     @Autowired
     TeamRepository teamRepository;
+
+    @Autowired
+    TournamentRepository tournamentRepository;
 
     public boolean existsByUsernameOrEmail(String username, String email) {
         return userRepository.existsByUsernameOrEmail(username, email);
@@ -63,6 +68,10 @@ public class UserService {
 
     public List<Team> findCreatedTeams(User user) {
         return teamRepository.findByCreatedBy(user);
+    }
+
+    public List<Tournament> findCreatedTournaments(User user) {
+        return tournamentRepository.findByCreatedBy(user);
     }
 
     public Optional<User> getLoggedUser() {

@@ -65,7 +65,7 @@ public class TeamController {
 
 
     @GetMapping("/{teamId}/players")
-    public List<Player> getPlayers(@RequestBody @PathVariable("teamId") UUID teamId) {
+    public List<Player> listAllPlayers(@RequestBody @PathVariable("teamId") UUID teamId) {
 
         return teamService.findByPlayers((teamId));
     }

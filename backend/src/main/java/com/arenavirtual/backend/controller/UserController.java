@@ -7,6 +7,7 @@ import com.arenavirtual.backend.dto.UserDTO;
 import com.arenavirtual.backend.dto.UserResponse;
 import com.arenavirtual.backend.model.entity.player.Player;
 import com.arenavirtual.backend.model.entity.team.Team;
+import com.arenavirtual.backend.model.entity.tournament.Tournament;
 import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.security.JwtService;
 import com.arenavirtual.backend.service.AuthService;
@@ -115,6 +116,17 @@ public class UserController {
 
         if (user.isPresent()) {
             return userService.findCreatedTeams(user.get());
+        }
+
+        return List.of();
+    }
+
+    @GetMapping("/my/tournaments")
+    public List<Tournament> getCreatedTournaments() {
+        Optional<User> user = userService.getLoggedUser();
+
+        if (user.isPresent()) {
+            return userService.findCreatedTournaments(user.get());
         }
 
         return List.of();
