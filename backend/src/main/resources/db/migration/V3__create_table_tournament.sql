@@ -7,8 +7,11 @@ CREATE TABLE tournament (
     min_teams INTEGER,
     max_teams INTEGER,
     image_representation_url VARCHAR(250),
-    format VARCHAR(250)
---    format_id BINARY(16),
---    FOREIGN KEY (format_id) REFERENCES format(id)
+    format VARCHAR(250),
+    created_at TIMESTAMP,
+    start_date DATE,
+    end_date DATE,
+    created_by BINARY(16),
 
-)
+    FOREIGN KEY (created_by) REFERENCES users(id)
+);

@@ -6,8 +6,10 @@ import com.arenavirtual.backend.model.entity.team.Team;
 import com.arenavirtual.backend.model.entity.team.TeamStats;
 import com.arenavirtual.backend.model.entity.tournament.Format;
 import com.arenavirtual.backend.model.entity.tournament.Tournament;
+import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.service.TeamService;
 import com.arenavirtual.backend.service.TournamentService;
+import com.arenavirtual.backend.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class TournamentController {
     @Autowired
     TeamService teamService;
 
+    @Autowired
+    UserService userService;
+
     @GetMapping("/{tournamentId}")
     public ResponseEntity<Tournament> getTournament(@PathVariable("tournamentId") UUID tournamentId) {
         return ResponseEntity.ok(tournamentService.findById(tournamentId).
@@ -50,9 +55,14 @@ public class TournamentController {
 
         System.out.println(dto);
 
+        User user = userService.getLoggedUser()
+                .orElseThrow(() -> new EntityNotFoundException("usuário não logado"));
+
         // adicionar o torneio
         Tournament newTournament = new Tournament();
         BeanUtils.copyProperties(dto, newTournament);
+
+        newTournament.setCreatedBy(user);
 
         tournamentService.save(newTournament);
 

@@ -1,8 +1,6 @@
 package com.arenavirtual.backend.model.entity.tournament;
 
-import com.arenavirtual.backend.model.entity.player.Player;
-import com.arenavirtual.backend.model.entity.team.Team;
-import com.arenavirtual.backend.model.tournamentStatus.TournamentProgressStatus;
+import com.arenavirtual.backend.model.entity.user.User;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -34,6 +33,17 @@ public class Tournament {
     private Integer maxTeams;
     @Column(name = "imageRepresentationUrl")
     private String imageRepresentationUrl;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    @Column(name = "start_date")
+    private LocalDate startDate;
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private User createdBy;
+
 //    @Column(name = "status")
 //    private TournamentProgressStatus status; // nao iniciado, em andamento e finalizado
 

@@ -24,9 +24,10 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
-    private LocalDate createdAt;
     private Boolean openToInvite; // players podem solicitar para entrarem
     private String logoUrl;
+
+    private LocalDate createdAt;
 
     @ManyToOne
     @JoinColumn(name = "created_by")
