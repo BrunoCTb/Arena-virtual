@@ -151,22 +151,5 @@ public class TeamController {
                 .toList();
     }
 
-    // Resposta de convite do time -> para o player
-    @PostMapping("/{teamId}/invite/{inviteId}")
-    public ResponseEntity<String> teamInviteResponse(@PathVariable(name = "teamId") UUID teamId,
-                                                     @PathVariable(name = "inviteId") UUID inviteId,
-                                                     @RequestBody InviteResponseDTO response) {
-
-        teamService.findById(teamId).orElseThrow(() -> new IllegalArgumentException("time não encontrado!"));
-
-        InviteTeam invite = inviteTeamService.findById(inviteId).
-        		orElseThrow(() -> new IllegalArgumentException("convite não encontrado!"));
-
-        // convite, resposta (aceita ou nao)
-        inviteTeamService.inviteResponse(invite, response.acceptInvite());
-
-        return ResponseEntity.ok("Player ");
-    }
-
 
 }
