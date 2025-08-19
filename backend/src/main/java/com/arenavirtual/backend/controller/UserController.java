@@ -11,6 +11,7 @@ import com.arenavirtual.backend.model.entity.tournament.Tournament;
 import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.security.JwtService;
 import com.arenavirtual.backend.service.AuthService;
+import com.arenavirtual.backend.service.PlayerService;
 import com.arenavirtual.backend.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +49,9 @@ public class UserController {
 
     @Autowired
     JwtService jwtService;
+
+    @Autowired
+    PlayerService playerService;
     
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserDTO dto) {
@@ -94,15 +98,22 @@ public class UserController {
 
     @PostMapping("/player")
     public ResponseEntity<String> becomePlayer(@RequestBody PlayerDTO dto) {
-        Optional<User> userFound = userService.findByUsernameOrEmail(dto.username(), dto.userEmail());
-
-        if (userFound.isEmpty()) {
-            return ResponseEntity.badRequest().body("Usuário não encontrado!");
-        }
+        User currentUser = userService.getLoggedUser()
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não logado"));
 
         Player userToPlayer = new Player();
         BeanUtils.copyProperties(dto, userToPlayer);
-        userToPlayer.setUser(userFound.get());
+
+        if (playerService.existsByUser(currentUser)) {
+            return ResponseEntity.badRequest().body("Você já é se tornou um player!");
+        }
+
+        if (playerService.existsByUsername(dto.username())) {
+            return ResponseEntity.badRequest().body("Username já está sendo usado!");
+        }
+
+
+        userToPlayer.setUser(currentUser);
 
         userService.createPlayer(userToPlayer);
 

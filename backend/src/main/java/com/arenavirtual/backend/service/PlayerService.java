@@ -1,6 +1,7 @@
 package com.arenavirtual.backend.service;
 
 import com.arenavirtual.backend.model.entity.player.Player;
+import com.arenavirtual.backend.model.entity.user.User;
 import com.arenavirtual.backend.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,15 @@ public class PlayerService {
     public List<Player> findAll() {
         return playerRepository.findAll();
     }
+
+    public boolean existsByUsername(String username) {
+        return playerRepository.existsByUsername(username);
+    }
+
+    public boolean existsByUser(User user) {
+        return playerRepository.existsByUser(user);
+    }
+
+    
 
 }
