@@ -55,4 +55,9 @@ public class TeamService {
     public void createTeamStats(TeamStats teamStats) {
         teamStatsRepository.save(teamStats);
     }
+
+    public boolean isRegistered(TeamStats teamStats) {
+        return teamStatsRepository.existsByTeamAndTournament(teamStats.getTeam(), teamStats.getTournament());
+    }
+
 }

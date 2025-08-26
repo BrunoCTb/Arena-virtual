@@ -16,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -71,8 +69,11 @@ public class TournamentController {
     
     @GetMapping("/{tournamentId}/findteams")
 	public List<Team> findTournamentTeams(@PathVariable("tournamentId") UUID tournamentId) {
+        tournamentService.findById(tournamentId)
+                .orElseThrow(() -> new EntityNotFoundException("O campeonato não foi encontrado!"));
+
         if (tournamentService.findAllTeams(tournamentId).isEmpty()) {
-            throw new IllegalArgumentException("Campeonato não encontrado!");
+            return List.of();
         }
 
     	return tournamentService.findAllTeams(tournamentId);
@@ -80,16 +81,26 @@ public class TournamentController {
 
 
     // cria o team_stats dele e consequentemente adiciona o time no torneio
-    @PostMapping("/{id}/addteam/{teamId}")
-    public ResponseEntity<String> addTeamToTournament(@PathVariable("id") UUID id, @PathVariable("teamId") UUID teamId) {
-        Optional<Team> team = teamService.findById(teamId);
-        Optional<Tournament> tournament = tournamentService.findById(id);
+    @PostMapping("/{tournamentId}/addteam/{teamId}")
+    public ResponseEntity<String> addTeamToTournament(@PathVariable("tournamentId") UUID tournamentId, @PathVariable("teamId") UUID teamId) {
+        Tournament tournament = tournamentService.findById(tournamentId)
+                .orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado!"));
 
-        TeamStats teamStats = new TeamStats(team.get(), tournament.get());
+        Team team = teamService.findById(teamId)
+                .orElseThrow(() -> new EntityNotFoundException("Time não encontrado!"));
+
+        TeamStats teamStats = new TeamStats(team, tournament);
+
+        if (teamService.isRegistered(teamStats)) {
+            String errorMsg = "Time já foi adicionado no torneio '" +
+                    teamStats.getTournament().getTitle() + "'!";
+
+            throw new IllegalArgumentException(errorMsg);
+        }
 
         teamService.createTeamStats(teamStats);
 
-        return ResponseEntity.ok("team stats criado!");
+        return ResponseEntity.ok("Time adicionado com sucesso!");
     }
     
     // metodo que ira servir apenas para realizar as primeiras configurações do campeonato,
