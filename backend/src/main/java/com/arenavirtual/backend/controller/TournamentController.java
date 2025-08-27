@@ -143,4 +143,6 @@ public class TournamentController {
     	return ResponseEntity.ok("campeonato iniciado [BÁSICO]");
     }
 
+
+
 }
