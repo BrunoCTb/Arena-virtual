@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -56,6 +57,10 @@ public class UserService {
         } catch (Exception e) {
             System.out.println("--> " + e);
         }
+    }
+
+    public Optional<User> findById(UUID id) {
+        return userRepository.findById(id);
     }
 
     public Optional<Player> findPlayerByPublicId(Long id) {

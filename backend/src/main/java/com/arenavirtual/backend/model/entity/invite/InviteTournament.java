@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+ import java.util.UUID;
 
 @NoArgsConstructor
 @Getter
@@ -17,6 +18,10 @@ import java.time.LocalDate;
 @ToString
 @Entity
 public class InviteTournament extends BaseInvite{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     // seta quem envia, caso for 'A', o 'B' que recebe o convite
     @Column(name = "sender_type")
