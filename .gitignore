@@ -23,3 +23,7 @@
 hs_err_pid*
 replay_pid*
 /.metadata/
+
+
+# Env
+src/main/resources/application.properties
